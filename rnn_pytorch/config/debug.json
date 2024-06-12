@@ -1,0 +1,125 @@
+{
+    "dataset": {
+        "name": "gscdv2",
+        "sample_rate": 16000
+    },
+    "use_cuda": 1,
+    "gpu_id": 0,
+
+    "arch": {
+        "type": "GRU",
+        "args": {}
+    },
+    "dataloader": {
+        "type": "CustomDataLoader",
+        "double_dynamic_range": false,
+        "channel_offset": 0,
+        "channel_scale": [1.665605344,1.39078664,1.101130961,1.092498047,1.020819327,1.014480875,1.103596063,1.747809623,1.000164408,1.420631163,1.104607694,1.168406907,1.23960928,1.154697406,2.182581807,1.573271671],
+        "args":{
+            "data_dir": "data/",
+            "batch_size": 128,
+            "shuffle": true,
+            "validation_split": 0.1,
+            "num_workers": 2
+        }
+    },
+    "feature": {
+        "type": "digital",
+        "n_filt": 16,
+        "qf": 1,
+        "bw_feat": 12,
+        "normalization": "standard",
+        "gradient": 0,
+        "log_feat": 1,
+        "approx_log": 1,
+        "frame_size": 0.016384,
+        "frame_stride": 0.016384,
+        "delta_t": 1.0,
+        "sample_rate": 16000,
+        "freq_low": 100,
+        "freq_high": 8000,
+        "remove_offset": 1,
+        "scale_channels": 1,
+        "oversample_factor": 2,
+        "analog":{
+            "mode": "fwrmag",
+            "ch_orders": 1,
+            "q_factor": 2,
+            "f_spacing": "mel",
+            "f_center": [99, 188, 415, 495, 950, 1050, 1410, 1750, 2200, 2130, 3350, 3420, 4940, 3450, 5450, 6000]
+        },
+        "digital":{
+            "nfft": 1024,
+            "f_spacing": "mel",
+            "f_center": [99, 188, 415, 495, 950, 1050, 1410, 1750, 2200, 2130, 3350, 3420, 4940, 3450, 5450, 6000]
+        },
+
+        "args":{
+            "data_dir": "data/",
+            "batch_size": 128,
+            "shuffle": true,
+            "validation_split": 0.1,
+            "num_workers": 2
+        }
+    },
+    "metrics": [
+        "accuracy", "top_k_acc"
+    ],
+
+    "model": {
+        "hid_type": "GRU",
+        "hid_type_retrain": "DeltaGRU",
+        "hid_size": 48,
+        "hid_layers": 2,
+        "hid_dropout": 0.2,
+        "fc_type": "FC",
+        "fc_extra_size": 0,
+        "fc_dropout": 0,
+        "qa": 1,
+        "aqi": 6,
+        "aqf": 8,
+        "qw": 1,
+        "wqi": 1,
+        "wqf": 7,
+        "nqi": 2,
+        "nqf": 6,
+        "qg": 0,
+        "gqi": 1,
+        "gqf": 9,
+        "qa_fc_extra": 1,
+        "aqi_fc_extra": 8,
+        "aqf_fc_extra": 8,
+        "qa_fc_final": 1,
+        "aqi_fc_final": 6,
+        "aqf_fc_final": 8,
+        "th_x": 0.0,
+        "th_h": 0.0,
+        "benchmark": 0,
+        "eval_sp": 1,
+        "hardsigmoid": 0,
+        "hardtanh": 0,
+        "drnn_stats": 1,
+        "debug": 0,
+        "fc_type": "FC"
+    },
+
+    "lr_scheduler": {
+        "type": "StepLR",
+        "args": {
+            "step_size": 50,
+            "gamma": 0.1
+        }
+    },
+    "trainer": {
+        "epochs": 100,
+
+        "save_dir": "saved/",
+        "save_period": 1,
+        "verbosity": 2,
+
+        "monitor": "min val_loss",
+        "early_stop": 10,
+
+        "tensorboard": true
+    }
+}
